@@ -4,10 +4,11 @@
  *
  * @format
  */
-
+import 'react-native-gesture-handler';
 import React from 'react';
-import type {PropsWithChildren} from 'react';
+import type { PropsWithChildren } from 'react';
 import {
+  ActivityIndicator,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -17,6 +18,8 @@ import {
   View,
 } from 'react-native';
 
+
+
 import {
   Colors,
   DebugInstructions,
@@ -24,36 +27,40 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import { createStackNavigator } from '@react-navigation/stack';
+import HomeScreen from './app/screens/home-screen';
+import NewsScreen from './app/screens/news-screen';
+import SettingScreen from './app/screens/setting-sreem';
+import { NavigationContainer } from '@react-navigation/native';
+import { MyBottomTabs } from './app/navigation/bottom-navigation';
+import { MyDrawer } from './app/navigation/drawer-navigation';
+import { MyTopTabs } from './app/navigation/toptab-navigation';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+const Stack = createStackNavigator();
+const linking = {
+  prefixes: ['newsapp://']
+};
+function MyStack() {
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
+    <NavigationContainer linking={linking}
+      fallback={<ActivityIndicator color="blue" size="large" />}>
+      <Stack.Navigator initialRouteName='TopTab' screenOptions={{
+        headerShown: false
+      }}>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="News" component={NewsScreen} />
+        <Stack.Screen name="Setting" component={SettingScreen} />
+        <Stack.Screen name='BottomTab' component={MyBottomTabs} />
+        <Stack.Screen name='MyDrawer' component={MyDrawer} />
+        <Stack.Screen name='TopTab' component={MyTopTabs} />
+      </Stack.Navigator>
+    </NavigationContainer>
+
   );
 }
+
+
+
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -63,56 +70,9 @@ function App(): React.JSX.Element {
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <MyStack />
   );
 }
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default App;
