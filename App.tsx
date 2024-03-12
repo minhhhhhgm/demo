@@ -64,7 +64,8 @@ function MyStack() {
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
-
+  console.log('asas');
+  
   // const backgroundStyle = {
   //   backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   // };
