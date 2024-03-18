@@ -44,7 +44,7 @@ function MyStack() {
   return (
     <NavigationContainer linking={linking}
       fallback={<ActivityIndicator color="blue" size="large" />}>
-      <Stack.Navigator initialRouteName='TopTab' screenOptions={{
+      <Stack.Navigator initialRouteName='Home' screenOptions={{
         headerShown: false
       }}>
         <Stack.Screen name="Home" component={HomeScreen} />
