@@ -1,26 +1,45 @@
-import React, { useState, useMemo } from 'react';
-import { View, Text, Button } from 'react-native';
+import React, { useMemo, useState } from 'react';
+import { View, Text, FlatList } from 'react-native';
+const data = [
+    { id: 1, name: 'John' },
+    { id: 2, name: 'Alice' },
+    { id: 3, name: 'Bob' },
+    { id: 4, name: 'Jane' },
+    { id: 5, name: 'Sam' },
+    { id: 6, name: 'Sam' },
+    { id: 7, name: 'Sam' },
+];
 
-function sum(a : number , b: number) {
-    console.log('Calculating sum...');
-    return a + b;
-}
-
-function SumComponent() {
-    const [countA, setCountA] = useState(0);
-    const [countB, setCountB] = useState(0);
-
-    const result = useMemo(() => sum(countA, countB), [countA, countB]);
-
+function UseMemoScreen() {
     return (
-        <View>
-            <Text>Count A: {countA}</Text>
-            <Text>Count B: {countB}</Text>
-            <Text>Sum: {result}</Text>
-            <Button title="Increment A" onPress={() => setCountA(countA + 1)} />
-            <Button title="Increment B" onPress={() => setCountB(countB + 1)} />
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',paddingTop:50 }}>
+            <UserList users={data} filter={'Sam'} />
         </View>
     );
 }
 
-export default SumComponent;
+
+
+
+const UserList = ({ users, filter }: any) => {
+    const filteredUsers = useMemo(
+        () => users.filter((user: any) => user.name.includes(filter)),
+        [users, filter]
+    );
+
+    const renderItem = ({ item }: any) => (
+        <Text key={item.id}>{item.name}</Text>
+    );
+
+    return (
+        <View>
+            <FlatList
+                data={filteredUsers}
+                renderItem={renderItem}
+                keyExtractor={item => item.id}
+            />
+        </View>
+    );
+};
+
+export default UseMemoScreen;
